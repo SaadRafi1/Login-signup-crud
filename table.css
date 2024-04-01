@@ -1,0 +1,14 @@
+.modal-header {
+  background-color: black;
+  color: white;
+}
+
+.modal-body form {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+form label {
+  width: 50px;
+  margin-bottom: 25px;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <div class="split-screen">
+      <div class="left">
+        <section class="copy">
+          <h1>Explore</h1>
+        </section>
+      </div>
+      <div class="right">
+        <form>
+          <section class="copy">
+            <h2>Sign Up</h2>
+            <div class="login-container">
+              <p>
+                Already have an account?<a href="login.html"
+                  ><strong>log In</strong></a
+                >
+              </p>
+            </div>
+          </section>
+
+          <div class="input-container name">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" />
+          </div>
+          <div class="input-container email">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" />
+          </div>
+          <div class="input-container password">
+            <label for="email">Password</label>
+            <input id="password" name="password" type="password" />
+          </div>
+          <button class="signup-btn" onClick="saveData()" type="submit">
+            Sign Up
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script>
+    function saveData() {
+      let name, email, password;
+      name = document.getElementById("name").value;
+      email = document.getElementById("email").value;
+      password = document.getElementById("password").value;
+      localStorage.setItem("name", name);
+      localStorage.setItem("email", email);
+      localStorage.setItem("password", password);
+
+      let user_records = new Array();
+      user_records = JSON.parse(localStorage.getItem("users"))
+        ? JSON.parse(localStorage.getItem("users"))
+        : [];
+      if (
+        user_records.some((v) => {
+          return v.email == email;
+        })
+      ) {
+        alert("Email aleady exist");
+      } else {
+        user_records.push({
+          name: name,
+          email: email,
+          password: password,
+        });
+        localStorage.setItem("users", JSON.stringify(user_records));
+        document.getElementById("signup-success").style.display = "block";
+      }
+    }
+  </script>
+</html>

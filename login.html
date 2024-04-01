@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <div class="split-screen">
+      <div class="left">
+        <section class="copy">
+          <h1>Explore</h1>
+        </section>
+      </div>
+      <div class="right">
+        <form>
+          <section class="copy">
+            <h2>Login</h2>
+            <div class="login-container">
+              <p>
+                Don't have an account get one now &#160;<a href="Signup.html"
+                  ><strong>Sign Up</strong></a
+                >
+              </p>
+            </div>
+          </section>
+          <div class="input-container email">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" />
+          </div>
+          <div class="input-container password">
+            <label for="email">Password</label>
+            <input id="password" name="password" type="password" />
+          </div>
+          <button class="signup-btn" onClick="saveData()" type="button">
+            Log In
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script>
+    function saveData() {
+      let email, password;
+      email = document.getElementById("email").value;
+      password = document.getElementById("password").value;
+
+      let user_records = new Array();
+      user_records = JSON.parse(localStorage.getItem("users"))
+        ? JSON.parse(localStorage.getItem("users"))
+        : [];
+      if (
+        user_records.some((v) => {
+          return v.email == email && v.password == password;
+        })
+      ) {
+        let current_user = user_records.filter((v) => {
+          return v.email == email && v.password == password;
+        })[0];
+        localStorage.setItem("name", current_user.name);
+        localStorage.setItem("email", current_user.email);
+        window.location.href = "DataTable.html";
+      } else {
+        alert("Email or password is incorrect");
+      }
+    }
+  </script>
+</html>
