@@ -14,7 +14,7 @@
         </section>
       </div>
       <div class="right">
-        <form>
+        <form id="signup-form">
           <section class="copy">
             <h2>Sign Up</h2>
             <div class="login-container">
@@ -25,7 +25,7 @@
               </p>
             </div>
           </section>
-
+          <!--Input fields for sign up page-->
           <div class="input-container name">
             <label for="name">Full Name</label>
             <input id="name" name="name" type="text" />
@@ -38,42 +38,69 @@
             <label for="email">Password</label>
             <input id="password" name="password" type="password" />
           </div>
-          <button class="signup-btn" onClick="saveData()" type="submit">
+
+          <!--behaviour of this button class is defined in the script tag where it is saving the data 
+            in local storage-->
+          <button class="signup-btn" id="signup-btn" type="submit">
             Sign Up
           </button>
+          <p id="signup-success" style="display: none; color: rgb(10, 11, 10)">
+            Sign up successful!
+          </p>
         </form>
       </div>
     </div>
   </body>
-  <script>
-    function saveData() {
-      let name, email, password;
-      name = document.getElementById("name").value;
-      email = document.getElementById("email").value;
-      password = document.getElementById("password").value;
-      localStorage.setItem("name", name);
-      localStorage.setItem("email", email);
-      localStorage.setItem("password", password);
 
-      let user_records = new Array();
-      user_records = JSON.parse(localStorage.getItem("users"))
-        ? JSON.parse(localStorage.getItem("users"))
-        : [];
-      if (
-        user_records.some((v) => {
-          return v.email == email;
-        })
-      ) {
-        alert("Email aleady exist");
-      } else {
-        user_records.push({
-          name: name,
-          email: email,
-          password: password,
-        });
-        localStorage.setItem("users", JSON.stringify(user_records));
-        document.getElementById("signup-success").style.display = "block";
+  <script>
+    /* This class is getting elements from the sign up form with basic functionality 
+     preventing empty input field after setting the data i am retriving the data from local storage into user_records
+     and checking if email exist and if it does not then in else condition i am pushing the data into local 
+     storage with JSON.stringify an the calling the class function */
+    class SignUpForm {
+      constructor() {
+        this.form = document.getElementById("signup-form");
+        this.nameInput = document.getElementById("name");
+        this.emailInput = document.getElementById("email");
+        this.passwordInput = document.getElementById("password");
+        this.successMessage = document.getElementById("signup-success");
+
+        this.form.addEventListener("submit", this.saveData.bind(this));
+      }
+
+      saveData(event) {
+        event.preventDefault();
+
+        const name = this.nameInput.value;
+        const email = this.emailInput.value;
+        const password = this.passwordInput.value;
+
+        if (name === "" || email === "" || password === "") {
+          alert("Please fill in all fields.");
+          return false;
+        }
+
+        let user_records = JSON.parse(localStorage.getItem("users")) || [];
+        console.log(user_records);
+
+        if (
+          user_records.some((v) => {
+            return v.email == email;
+          })
+        ) {
+          alert("Email already exists");
+        } else {
+          user_records.push({
+            name: name,
+            email: email,
+            password: password,
+          });
+          localStorage.setItem("users", JSON.stringify(user_records));
+          this.successMessage.style.display = "block";
+        }
       }
     }
+
+    const signUp = new SignUpForm();
   </script>
 </html>

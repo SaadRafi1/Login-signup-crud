@@ -14,7 +14,7 @@
         </section>
       </div>
       <div class="right">
-        <form>
+        <form id="loginForm">
           <section class="copy">
             <h2>Login</h2>
             <div class="login-container">
@@ -24,6 +24,7 @@
                 >
               </p>
             </div>
+            <!-- Input fields for Login Page -->
           </section>
           <div class="input-container email">
             <label for="email">Email</label>
@@ -33,37 +34,47 @@
             <label for="email">Password</label>
             <input id="password" name="password" type="password" />
           </div>
-          <button class="signup-btn" onClick="saveData()" type="button">
-            Log In
-          </button>
+          <button class="signup-btn" id="loginBtn" type="button">Log In</button>
         </form>
       </div>
     </div>
   </body>
   <script>
-    function saveData() {
-      let email, password;
-      email = document.getElementById("email").value;
-      password = document.getElementById("password").value;
+    /* In this class i am taking inputs through get element by id and then by declaring an array 
+    i am getting item that is in local storage under key value users then in  if conidtion if the user is found 
+     i am setting them in local storage in order to save login info and then by window.location i a redirecting
+     to a new page after successfull login that is data-table.html*/
+    class UserAuth {
+      constructor() {
+        this.loginBtn = document.getElementById("loginBtn");
+        this.loginForm = document.getElementById("loginForm");
+        this.loginBtn.addEventListener("click", this.handleLogin.bind(this));
+      }
 
-      let user_records = new Array();
-      user_records = JSON.parse(localStorage.getItem("users"))
-        ? JSON.parse(localStorage.getItem("users"))
-        : [];
-      if (
-        user_records.some((v) => {
-          return v.email == email && v.password == password;
-        })
-      ) {
-        let current_user = user_records.filter((v) => {
-          return v.email == email && v.password == password;
-        })[0];
-        localStorage.setItem("name", current_user.name);
-        localStorage.setItem("email", current_user.email);
-        window.location.href = "DataTable.html";
-      } else {
-        alert("Email or password is incorrect");
+      handleLogin() {
+        const email = this.loginForm.email.value;
+        const password = this.loginForm.password.value;
+
+        if (email === "" || password === "") {
+          alert("Please enter both email and password.");
+          return;
+        }
+
+        let userRecords = JSON.parse(localStorage.getItem("users")) || [];
+        const foundUser = userRecords.find(
+          (user) => user.email === email && user.password === password
+        );
+
+        if (foundUser) {
+          localStorage.setItem("name", foundUser.name);
+          localStorage.setItem("email", foundUser.email);
+          window.location.href = "DataTable.html";
+        } else {
+          alert("Email or password is incorrect");
+        }
       }
     }
+
+    const userAuth = new UserAuth();
   </script>
 </html>
